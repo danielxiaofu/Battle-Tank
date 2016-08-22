@@ -8,14 +8,13 @@
 void ATankPlayerController2::BeginPlay()
 {
 	Super::BeginPlay();
-	UE_LOG(LogTemp, Warning, TEXT("Player controller 2 begin play!"));
 
 	ATank* currentTank = GetControlledTank();
 	if (currentTank) {
-		UE_LOG(LogTemp, Warning, TEXT("Controlled tank %s found!"), *(currentTank->GetName()));
+		UE_LOG(LogTemp, Warning, TEXT("Player Controlled tank %s found!"), *(currentTank->GetName()));
 	}
 	else {
-		UE_LOG(LogTemp, Error, TEXT("Controlled tank missing!"));
+		UE_LOG(LogTemp, Error, TEXT("Player Controlled tank missing!"));
 	}
 }
 
