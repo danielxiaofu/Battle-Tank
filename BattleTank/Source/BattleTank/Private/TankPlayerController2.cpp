@@ -51,9 +51,9 @@ bool ATankPlayerController2::GetSightRayHitLocation(FVector& HitLocation) const 
 		/// Line trace alone the look direction
 		FVector HitLocation;
 		if (GetLookVectorHitLocation(WorldDirection, HitLocation)) {
-			
+			ATank* ControlledTank = GetControlledTank();
+			ControlledTank->AimAt(HitLocation);
 		}
-		UE_LOG(LogTemp, Warning, TEXT("Hitlocation = %s"), *HitLocation.ToString())
 	}
 
 	return true;
