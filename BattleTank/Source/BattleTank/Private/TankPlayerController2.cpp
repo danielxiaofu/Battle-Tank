@@ -39,12 +39,14 @@ ATank * ATankPlayerController2::GetControlledTank() const
 }
 
 bool ATankPlayerController2::GetSightRayHitLocation(FVector& HitLocation) const {
+
 	/// Find the location of the reticle on screen coord
 	int32 ViewportSizeX, ViewportSizeY;
 	GetViewportSize(ViewportSizeX, ViewportSizeY);
 	auto ScreenLocation = FVector2D(ViewportSizeX * CrossHairXLocation, ViewportSizeY * CrossHairYLocation);
-
-
-	return false;
+	FVector WorldLocation, WorldDirection;
+	DeprojectScreenPositionToWorld(ScreenLocation.X, ScreenLocation.Y, WorldLocation, WorldDirection);
+	UE_LOG(LogTemp, Warning, TEXT("World location = %s"), *WorldLocation.ToString());
+	return true;
 }
 
