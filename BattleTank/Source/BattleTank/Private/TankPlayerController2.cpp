@@ -11,14 +11,25 @@ void ATankPlayerController2::BeginPlay()
 
 	ATank* currentTank = GetControlledTank();
 	if (currentTank) {
-		UE_LOG(LogTemp, Warning, TEXT("Player Controlled tank %s found!"), *(currentTank->GetName()));
 	}
 	else {
 		UE_LOG(LogTemp, Error, TEXT("Player Controlled tank missing!"));
 	}
 }
 
+void ATankPlayerController2::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	AimAtCrossHair();
+}
+
+void ATankPlayerController2::AimAtCrossHair()
+{
+
+}
+
 ATank * ATankPlayerController2::GetControlledTank() const
 {
 	return Cast<ATank>(GetPawn());
 }
+

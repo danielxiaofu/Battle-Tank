@@ -9,14 +9,15 @@ void  ATankAIController::BeginPlay() {
 	ATank* currentTank = GetControlledTank();
 	ATank* playerTank = GetPlayerTank();
 	if (currentTank) {
-		UE_LOG(LogTemp, Warning, TEXT("AI Controlled tank %s found!"), *(currentTank->GetName()));
 	}
 	else {
 		UE_LOG(LogTemp, Error, TEXT("AI Controlled tank missing!"));
 	}
-	if (playerTank) {
-		UE_LOG(LogTemp, Warning, TEXT("Player Controlled tank %s found by AI %s"), *(playerTank->GetName()), *(currentTank->GetName()));
-	}
+}
+
+void ATankAIController::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
 }
 
 ATank* ATankAIController::GetControlledTank() const {
