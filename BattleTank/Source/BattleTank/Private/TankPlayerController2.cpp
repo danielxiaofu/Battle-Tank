@@ -25,11 +25,26 @@ void ATankPlayerController2::Tick(float DeltaTime)
 
 void ATankPlayerController2::AimAtCrossHair()
 {
+	if (!GetControlledTank()) {	return;	}
+	FVector HitLocation;
+	if (GetSightRayHitLocation(HitLocation)) {
 
+	}
+	return;
 }
 
 ATank * ATankPlayerController2::GetControlledTank() const
 {
 	return Cast<ATank>(GetPawn());
+}
+
+bool ATankPlayerController2::GetSightRayHitLocation(FVector& HitLocation) const {
+	/// Find the location of the reticle on screen coord
+	int32 ViewportSizeX, ViewportSizeY;
+	GetViewportSize(ViewportSizeX, ViewportSizeY);
+	auto ScreenLocation = FVector2D(ViewportSizeX * CrossHairXLocation, ViewportSizeY * CrossHairYLocation);
+
+
+	return false;
 }
 
