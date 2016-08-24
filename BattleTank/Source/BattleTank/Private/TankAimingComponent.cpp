@@ -2,6 +2,7 @@
 
 #include "BattleTank.h"
 #include "../Public/TankAimingComponent.h"
+#include"../Public/TankBarrel.h"
 
 
 // Sets default values for this component's properties
@@ -41,33 +42,35 @@ void  UTankAimingComponent::AimAt(FVector AimLocation, float LaunchSpeed) {
 	FVector StartLocation = BarrelReference->GetSocketLocation(FName("Projectile"));
 
 	// Calculate the OutLaunchVelocity
-	if (UGameplayStatics::SuggestProjectileVelocity( // Calculate the OutLaunchVelocity
+	bool bHaveAimSolution = UGameplayStatics::SuggestProjectileVelocity
+	( // Calculate the OutLaunchVelocity
 		this,
 		OutLaunchVelocity,
 		StartLocation,
 		AimLocation,
 		LaunchSpeed,
-		false,
-		0.0f,
-		0.0f,
 		ESuggestProjVelocityTraceOption::DoNotTrace
-	))
+	);
+	if (bHaveAimSolution)
 	{
 		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
 		UE_LOG(LogTemp, Warning, TEXT("Firing at %s"), *AimDirection.ToString())
-		DrawDebugLine(
-			GetWorld(),
-			StartLocation,
-			StartLocation + OutLaunchVelocity * 100,
-			FColor(255, 0, 0),
-			false
-		);
+		MoveBarrelTowards(AimDirection);
 	}
 	// If no solution found do nothing
 	
 }
 
-void UTankAimingComponent::SetBarrelReference(UStaticMeshComponent * Barrel)
+void UTankAimingComponent::SetBarrelReference(UTankBarrel * Barrel)
 {
 	BarrelReference = Barrel;
+}
+
+void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection) {
+	// Work out difference between current barrel rotation and AimDirection
+	auto BarrelRotator = BarrelReference->GetForwardVector().Rotation();
+	auto AimRotator = AimDirection.Rotation();
+	auto DeltaRotator = AimRotator - BarrelRotator;
+
+	BarrelReference->Elevate(5); // TODO Make a variable
 }

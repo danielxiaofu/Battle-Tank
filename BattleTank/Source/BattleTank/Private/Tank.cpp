@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "BattleTank.h"
+
 #include "../Public/Tank.h"
 
 
@@ -38,7 +39,7 @@ void ATank::AimAt(FVector AimLocation) {
 	TankAimingComponent->AimAt(AimLocation, LaunchSpeed);
 }
 
-void ATank::SetBarrelReference(UStaticMeshComponent* BarrelReference)
+void ATank::SetBarrelReference(UTankBarrel* BarrelReference)
 {
 	TankAimingComponent->SetBarrelReference(BarrelReference);
 }
