@@ -40,6 +40,7 @@ void  UTankAimingComponent::AimAt(FVector AimLocation, float LaunchSpeed) {
 
 	FVector OutLaunchVelocity;
 	FVector StartLocation = BarrelReference->GetSocketLocation(FName("Projectile"));
+	FCollisionResponseParams CollisionRes;
 
 	// Calculate the OutLaunchVelocity
 	bool bHaveAimSolution = UGameplayStatics::SuggestProjectileVelocity
@@ -49,16 +50,39 @@ void  UTankAimingComponent::AimAt(FVector AimLocation, float LaunchSpeed) {
 		StartLocation,
 		AimLocation,
 		LaunchSpeed,
+		false,
+		0,
+		0,
 		ESuggestProjVelocityTraceOption::DoNotTrace
+		//,CollisionRes,
+		//TArray<AActor*>(),
+		//true
 	);
+
 	if (bHaveAimSolution)
 	{
 		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
-		UE_LOG(LogTemp, Warning, TEXT("Firing at %s"), *AimDirection.ToString())
 		MoveBarrelTowards(AimDirection);
+		auto Time = GetWorld()->GetTimeSeconds();
+		UE_LOG(LogTemp, Warning, TEXT("%f : Aim solution found"), Time);
 	}
-	// If no solution found do nothing
+	else
+	{
+		auto Time = GetWorld()->GetTimeSeconds();
+		UE_LOG(LogTemp, Warning, TEXT("%f : No aim solve found"), Time);
+	}
 	
+	/*DrawDebugLine(
+		GetWorld(),
+		StartLocation,
+		StartLocation + OutLaunchVelocity,
+		FColor::Red,
+		false,
+		-1,
+		'\000',
+		10
+	);*/
+
 }
 
 void UTankAimingComponent::SetBarrelReference(UTankBarrel * Barrel)
