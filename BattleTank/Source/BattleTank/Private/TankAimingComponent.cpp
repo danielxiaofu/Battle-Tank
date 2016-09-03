@@ -66,12 +66,12 @@ void  UTankAimingComponent::AimAt(FVector AimLocation, float LaunchSpeed) {
 		MoveBarrelTowards(AimDirection);
 		MoveTurretTowards(AimDirection);
 		auto Time = GetWorld()->GetTimeSeconds();
-		UE_LOG(LogTemp, Warning, TEXT("%f : Aim solution found"), Time);
+		//UE_LOG(LogTemp, Warning, TEXT("%f : Aim solution found"), Time);
 	}
 	else
 	{
 		auto Time = GetWorld()->GetTimeSeconds();
-		UE_LOG(LogTemp, Warning, TEXT("%f : No aim solve found"), Time);
+		//UE_LOG(LogTemp, Warning, TEXT("%f : No aim solve found"), Time);
 	}
 	
 	/*DrawDebugLine(
@@ -105,7 +105,7 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection) {
 	auto AimRotator = AimDirection.Rotation();
 	auto DeltaRotator = AimRotator - BarrelRotator;
 
-	BarrelReference->Elevate(DeltaRotator.Pitch); // TODO Make a variable
+	BarrelReference->Elevate(DeltaRotator.Pitch);
 }
 
 void UTankAimingComponent::MoveTurretTowards(FVector AimDirection)
