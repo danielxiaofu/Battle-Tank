@@ -7,6 +7,7 @@
 
 // Forward Declaration
 class UTankBarrel;
+class UTankTurret;
 
 // Hold barrel's properties
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -18,7 +19,9 @@ public:
 	// Sets default values for this component's properties
 	UTankAimingComponent();
 
-	UTankBarrel* BarrelReference;
+	UTankBarrel* BarrelReference = nullptr;
+
+	UTankTurret* TurretReference = nullptr;
 
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -31,7 +34,10 @@ public:
 	
 	void SetBarrelReference(UTankBarrel* Barrel);
 
+	void SetTurretReference(UTankTurret* Turret);
+
 private:
 	void MoveBarrelTowards(FVector AimDirection);
 
+	void MoveTurretTowards(FVector AimDirection);
 };
