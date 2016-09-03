@@ -7,6 +7,11 @@ void UTankTurret::Traverse(float RelativeSpeed) {
 	auto YawChange = FMath::Clamp<float>(RelativeSpeed, -1, 1) * MaxDegreePerSecond * GetWorld()->GetDeltaSeconds();
 	auto Traverse = RelativeRotation.Yaw + YawChange;
 	SetRelativeRotation(FRotator(0, Traverse, 0));
+
+	//TODO solve bug: when turret rotates to the rear of the tank it changes to opposite direction
+
+
+
 }
 
 
