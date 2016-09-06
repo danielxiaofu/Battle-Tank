@@ -37,16 +37,15 @@ public:
 	// Called every frame
 	virtual void TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction ) override;
 
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+	void Initialise(UTankTurret* TurretToSet, UTankBarrel* BarrelToSet);
+
 	// Aim at provided location
 	void AimAt(FVector, float);
 	
-	void SetBarrelReference(UTankBarrel* Barrel);
-
-	void SetTurretReference(UTankTurret* Turret);
-
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "State")
-	EFiringStatus FiringStatus = EFiringStatus::Reloading;
+	EFiringStatus FiringStatus = EFiringStatus::Aiming;
 
 private:
 	void MoveBarrelTowards(FVector AimDirection);
