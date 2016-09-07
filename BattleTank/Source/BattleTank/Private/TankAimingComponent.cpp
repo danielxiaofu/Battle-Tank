@@ -38,13 +38,13 @@ void UTankAimingComponent::TickComponent( float DeltaTime, ELevelTick TickType, 
 
 void UTankAimingComponent::Initialise(UTankTurret * TurretToSet, UTankBarrel * BarrelToSet)
 {
-	if (!TurretToSet || !BarrelToSet) { return; }
+	if (!ensure(TurretToSet && BarrelToSet)) { return; }
 	TurretReference = TurretToSet;
 	BarrelReference = BarrelToSet;
 }
 
 void  UTankAimingComponent::AimAt(FVector AimLocation, float LaunchSpeed) {
-	if (!BarrelReference) { return; }
+	if (!ensure(BarrelReference)) { return; }
 
 	FVector OutLaunchVelocity;
 	FVector StartLocation = BarrelReference->GetSocketLocation(FName("Projectile"));

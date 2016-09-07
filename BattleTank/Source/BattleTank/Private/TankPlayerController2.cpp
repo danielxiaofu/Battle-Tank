@@ -27,7 +27,7 @@ void ATankPlayerController2::Tick(float DeltaTime)
 
 void ATankPlayerController2::AimAtCrossHair()
 {
-	if (!GetControlledTank()) {	return;	}
+	if (!ensure(GetControlledTank())) {	return;	}
 	FVector HitLocation;
 	if (GetSightRayHitLocation(HitLocation)) {
 

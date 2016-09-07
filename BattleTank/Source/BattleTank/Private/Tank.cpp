@@ -17,7 +17,7 @@ ATank::ATank()
 }
 
 void ATank::AimAt(FVector AimLocation) {
-	if (!TankAimingComponent) { return; }
+	if (!ensure(TankAimingComponent)) { return; }
 	TankAimingComponent->AimAt(AimLocation, LaunchSpeed);
 }
 
@@ -25,7 +25,7 @@ void ATank::AimAt(FVector AimLocation) {
 void ATank::Fire()
 {
 	bool Reloaded = FPlatformTime::Seconds() - LastFireTime > ReloadTime;
-	if (!TankAimingComponent) { return; }
+	if (!ensure(TankAimingComponent)) { return; }
 	Barrel = TankAimingComponent->BarrelReference;
 	if (Barrel && Reloaded) {
 		// Spawn a projectile at socket location 
