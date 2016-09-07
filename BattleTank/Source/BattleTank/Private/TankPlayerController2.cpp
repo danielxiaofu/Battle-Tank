@@ -1,7 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "BattleTank.h"
-#include "../Public/Tank.h"
 #include "../Public/TankAimingComponent.h"
 #include "../Public/TankPlayerController2.h"
 
@@ -10,12 +9,9 @@
 void ATankPlayerController2::BeginPlay()
 {
 	Super::BeginPlay();
-	auto AimingComponent = GetControlledTank()->FindComponentByClass<UTankAimingComponent>();
-	if (AimingComponent) {
-		FoundAimingComponent(AimingComponent);
-	} else {
-		UE_LOG(LogTemp, Error, TEXT("Player controller cant find aiming component at begin play"))
-	}
+	AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
+	if (!ensure(AimingComponent)) { return; } 
+	FoundAimingComponent(AimingComponent);
 	
 }
 
@@ -27,17 +23,10 @@ void ATankPlayerController2::Tick(float DeltaTime)
 
 void ATankPlayerController2::AimAtCrossHair()
 {
-	if (!ensure(GetControlledTank())) {	return;	}
+	if (!ensure(AimingComponent)) {	return;	}
 	FVector HitLocation;
-	if (GetSightRayHitLocation(HitLocation)) {
-
-	}
+	GetSightRayHitLocation(HitLocation);
 	return;
-}
-
-ATank * ATankPlayerController2::GetControlledTank() const
-{
-	return Cast<ATank>(GetPawn());
 }
 
 bool ATankPlayerController2::GetSightRayHitLocation(FVector& HitLocation) const {
@@ -53,8 +42,7 @@ bool ATankPlayerController2::GetSightRayHitLocation(FVector& HitLocation) const 
 		/// Line trace alone the look direction
 		FVector HitLocation;
 		if (GetLookVectorHitLocation(WorldDirection, HitLocation)) {
-			ATank* ControlledTank = GetControlledTank();
-			ControlledTank->AimAt(HitLocation);
+			AimingComponent->AimAt(HitLocation);
 		}
 	}
 

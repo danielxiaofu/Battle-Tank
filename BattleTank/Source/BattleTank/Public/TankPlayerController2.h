@@ -17,13 +17,13 @@ class BATTLETANK_API ATankPlayerController2 : public APlayerController
 
 
 protected:
-	UFUNCTION(BlueprintCallable, Category = "Setup")
-	ATank* GetControlledTank() const;
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
 	void FoundAimingComponent(UTankAimingComponent* AimCompRef);
 
 private:
+
+	UTankAimingComponent* AimingComponent;
 
 UPROPERTY(EditDefaultsOnly)
 float CrossHairXLocation = 0.5f;

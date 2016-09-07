@@ -4,6 +4,7 @@
 #include "../Public/TankAimingComponent.h"
 #include"../Public/TankBarrel.h"
 #include"../Public/TankTurret.h"
+#include "../Public/Projectile.h"
 
 
 // Sets default values for this component's properties
@@ -43,7 +44,7 @@ void UTankAimingComponent::Initialise(UTankTurret * TurretToSet, UTankBarrel * B
 	BarrelReference = BarrelToSet;
 }
 
-void  UTankAimingComponent::AimAt(FVector AimLocation, float LaunchSpeed) {
+void  UTankAimingComponent::AimAt(FVector AimLocation) {
 	if (!ensure(BarrelReference)) { return; }
 
 	FVector OutLaunchVelocity;
@@ -92,6 +93,22 @@ void  UTankAimingComponent::AimAt(FVector AimLocation, float LaunchSpeed) {
 		10
 	);*/
 
+}
+
+void UTankAimingComponent::Fire()
+{
+	bool Reloaded = FPlatformTime::Seconds() - LastFireTime > ReloadTime;
+	if (!ensure(BarrelReference)) { return; }
+	if (Reloaded) {
+		// Spawn a projectile at socket location 
+		auto Projectile = GetWorld()->SpawnActor<AProjectile>(
+			ProjectileBluePrint,
+			BarrelReference->GetSocketLocation(FName("Projectile")),
+			BarrelReference->GetSocketRotation(FName("Projectile"))
+			);
+		Projectile->LaunchProjectile(LaunchSpeed);
+		LastFireTime = FPlatformTime::Seconds();
+	}
 }
 
 void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection) {
