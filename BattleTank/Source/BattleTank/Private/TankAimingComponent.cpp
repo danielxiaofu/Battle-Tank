@@ -18,23 +18,28 @@ UTankAimingComponent::UTankAimingComponent()
 	// ...
 }
 
+void UTankAimingComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) {
+	if ((FPlatformTime::Seconds() - LastFireTime) < ReloadTime) {
+		FiringStatus = EFiringStatus::Reloading;
+	}
+	else if (IsBarrelMoving()) {
+		FiringStatus = EFiringStatus::Aiming;
+	}
+	else {
+		FiringStatus = EFiringStatus::Locked;
+	}
+
+
+}
 
 // Called when the game starts
 void UTankAimingComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
+	/// So that first fire is after initial reload
+	LastFireTime = FPlatformTime::Seconds();
 	// ...
 	
-}
-
-
-// Called every frame
-void UTankAimingComponent::TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction )
-{
-	Super::TickComponent( DeltaTime, TickType, ThisTickFunction );
-
-	// ...
 }
 
 void UTankAimingComponent::Initialise(UTankTurret * TurretToSet, UTankBarrel * BarrelToSet)
@@ -70,9 +75,10 @@ void  UTankAimingComponent::AimAt(FVector AimLocation) {
 
 	if (bHaveAimSolution)
 	{
-		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
+		AimDirection = OutLaunchVelocity.GetSafeNormal();
 		MoveBarrelTowards(AimDirection);
 		MoveTurretTowards(AimDirection);
+
 		auto Time = GetWorld()->GetTimeSeconds();
 		//UE_LOG(LogTemp, Warning, TEXT("%f : Aim solution found"), Time);
 	}
@@ -97,9 +103,9 @@ void  UTankAimingComponent::AimAt(FVector AimLocation) {
 
 void UTankAimingComponent::Fire()
 {
-	bool Reloaded = FPlatformTime::Seconds() - LastFireTime > ReloadTime;
+	
 	if (!ensure(BarrelReference)) { return; }
-	if (Reloaded) {
+	if (!(FiringStatus == EFiringStatus::Reloading)) {
 		// Spawn a projectile at socket location 
 		auto Projectile = GetWorld()->SpawnActor<AProjectile>(
 			ProjectileBluePrint,
@@ -129,4 +135,10 @@ void UTankAimingComponent::MoveTurretTowards(FVector AimDirection)
 	auto DeltaRotator = AimRotator - TurretRotator;
 
 	TurretReference->Traverse(DeltaRotator.Yaw);
+}
+
+bool UTankAimingComponent::IsBarrelMoving()
+{
+
+	return !BarrelReference->GetForwardVector().GetSafeNormal().Equals(AimDirection, 0.01f);
 }

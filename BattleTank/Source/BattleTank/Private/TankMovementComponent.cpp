@@ -46,7 +46,7 @@ void UTankMovementComponent::RequestDirectMove(const FVector & MoveVelocity, boo
 	auto AITurnThrow = FVector::CrossProduct(TankForward, AIForwardIntension);
 	IntendTurnRight(AITurnThrow.Z);
 
-	UE_LOG(LogTemp, Warning, TEXT("Turn: %f, Forward: %f"), AITurnThrow.Z, AIForwardThrow);
+	//UE_LOG(LogTemp, Warning, TEXT("Turn: %f, Forward: %f"), AITurnThrow.Z, AIForwardThrow);
 }
 
 
