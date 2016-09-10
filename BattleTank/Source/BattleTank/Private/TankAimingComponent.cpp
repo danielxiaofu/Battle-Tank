@@ -134,6 +134,10 @@ void UTankAimingComponent::MoveTurretTowards(FVector AimDirection)
 	auto AimRotator = AimDirection.Rotation();
 	auto DeltaRotator = AimRotator - TurretRotator;
 
+	// Always yaw the shortest way
+	if (FMath::Abs<float>(DeltaRotator.Yaw) > 180) {
+		DeltaRotator.Yaw *= -1;
+	}
 	TurretReference->Traverse(DeltaRotator.Yaw);
 }
 

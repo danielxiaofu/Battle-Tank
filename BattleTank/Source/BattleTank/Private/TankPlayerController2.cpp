@@ -45,10 +45,11 @@ bool ATankPlayerController2::GetSightRayHitLocation(FVector& HitLocation) const 
 		FVector HitLocation;
 		if (GetLookVectorHitLocation(WorldDirection, HitLocation)) {
 			AimingComponent->AimAt(HitLocation);
+			return true;
 		}
 	}
 
-	return true;
+	return false;
 }
 
 bool ATankPlayerController2::GetLookDirection(FVector2D ScreenLocation, FVector& WorldDirection) const {
