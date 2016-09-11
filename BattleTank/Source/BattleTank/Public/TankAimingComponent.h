@@ -53,7 +53,7 @@ protected:
 	EFiringStatus FiringStatus = EFiringStatus::Reloading;
 
 	UPROPERTY(BlueprintReadOnly, Category = "State")
-	int CurrentAmmo = 0;
+	int32 CurrentAmmo = 0;
 
 private:
 
@@ -68,7 +68,8 @@ private:
 
 	double LastFireTime = 0;
 
-	int TotalAmmo = 2;
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+	int32 TotalAmmo = 2;
 
 	FVector AimDirection;
 
