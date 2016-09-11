@@ -19,7 +19,10 @@ UTankAimingComponent::UTankAimingComponent()
 }
 
 void UTankAimingComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) {
-	if ((FPlatformTime::Seconds() - LastFireTime) < ReloadTime) {
+	if (CurrentAmmo <= 0) {
+		FiringStatus = EFiringStatus::NoAmmo;
+	}
+	else if ((FPlatformTime::Seconds() - LastFireTime) < ReloadTime) {
 		FiringStatus = EFiringStatus::Reloading;
 	}
 	else if (IsBarrelMoving()) {
@@ -38,6 +41,7 @@ void UTankAimingComponent::BeginPlay()
 	Super::BeginPlay();
 	/// So that first fire is after initial reload
 	LastFireTime = FPlatformTime::Seconds();
+	CurrentAmmo = TotalAmmo;
 	// ...
 	
 }
@@ -105,7 +109,7 @@ void UTankAimingComponent::Fire()
 {
 	
 	if (!ensure(BarrelReference)) { return; }
-	if (!(FiringStatus == EFiringStatus::Reloading)) {
+	if (FiringStatus == EFiringStatus::Aiming || FiringStatus == EFiringStatus::Locked) {
 		// Spawn a projectile at socket location 
 		auto Projectile = GetWorld()->SpawnActor<AProjectile>(
 			ProjectileBluePrint,
@@ -113,6 +117,7 @@ void UTankAimingComponent::Fire()
 			BarrelReference->GetSocketRotation(FName("Projectile"))
 			);
 		Projectile->LaunchProjectile(LaunchSpeed);
+		CurrentAmmo --;
 		LastFireTime = FPlatformTime::Seconds();
 	}
 }
