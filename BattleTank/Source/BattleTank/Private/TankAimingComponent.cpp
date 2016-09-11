@@ -146,3 +146,8 @@ bool UTankAimingComponent::IsBarrelMoving()
 	if (!ensure(BarrelReference)) { return false; }
 	return !BarrelReference->GetForwardVector().GetSafeNormal().Equals(AimDirection, 0.01f);
 }
+
+EFiringStatus UTankAimingComponent::GetFiringState() const
+{
+	return FiringStatus;
+}
